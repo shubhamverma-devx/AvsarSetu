@@ -28,28 +28,28 @@ A personalized space for students to track saved internships, receive updates on
 7. Dark Mode Support
 A complete system-wide dark theme toggle accessible via settings for enhanced user experience.
 
-🛠️ Tech Stack
+🛠️ Tech Stack<br>
 
-Frontend: HTML5, CSS3, JavaScript (Vanilla)
-Styling: Tailwind CSS (Utility-first CSS framework)
-Data Visualization: Chart.js
-Icons: Lucide Icons / FontAwesome / Inline SVGs
-Storage: Browser LocalStorage (for prototype persistence)
-Fonts: Poppins (Google Fonts)
+Frontend: HTML5, CSS3, JavaScript (Vanilla)<br>
+Styling: Tailwind CSS (Utility-first CSS framework)<br>
+Data Visualization: Chart.js<br>
+Icons: Lucide Icons / FontAwesome / Inline SVGs<br>
+Storage: Browser LocalStorage (for prototype persistence)<br>
+Fonts: Poppins (Google Fonts)<br>
 
 📂 Project Structure
 
-AvsarSetu
-├── index.html            # Landing Page with AI Search & Chatbot
-├── login.html            # Secure Login & Registration
-├── profile-setup.html    # Multi-step Onboarding Process
-├── dashboard.html        # Main Internship Discovery Hub
-├── skill-report.html     # Personalized Skill Analytics
-├── courses.html          # Upskilling Recommendations
-├── resume-builder.html   # AI Resume Generator
-├── notifications.html    # User Updates & Alerts
-├── settings.html         # Theme & Account Preferences
-└── about.html            # Mission & Team Details
+AvsarSetu<br>
+├── index.html            # Landing Page with AI Search & Chatbot<br>
+├── login.html            # Secure Login & Registration<br>
+├── profile-setup.html    # Multi-step Onboarding Process<br>
+├── dashboard.html        # Main Internship Discovery Hub<br>
+├── skill-report.html     # Personalized Skill Analytics<br>
+├── courses.html          # Upskilling Recommendations<br>
+├── resume-builder.html   # AI Resume Generator<br>
+├── notifications.html    # User Updates & Alerts<br>
+├── settings.html         # Theme & Account Preferences<br>
+└── about.html            # Mission & Team Details<br>
 
 
 🚀 How to Run
@@ -65,24 +65,24 @@ git clone (https://github.com/shubhamverma-devx/AvsarSetu.git)
 Navigate to the project folder.
 Open index.html in any modern web browser (Chrome, Firefox, Edge).
 
-🗺️ Future Roadmap (Phase 2)
+🗺️ Future Roadmap (Phase 2) 
+<br>
+Unified Application System: Integration with government APIs to allow direct applications from the platform.<br>
+AI Interview Bot: A specialized chatbot to conduct mock interviews for specific government roles.<br>
+PSU Job Expansion: Extending the platform to include entry-level full-time roles in Public Sector Undertakings.<br>
+Verified Accounts: Official dashboard for government departments to post and manage applications directly.<br>
 
-Unified Application System: Integration with government APIs to allow direct applications from the platform.
-AI Interview Bot: A specialized chatbot to conduct mock interviews for specific government roles.
-PSU Job Expansion: Extending the platform to include entry-level full-time roles in Public Sector Undertakings.
-Verified Accounts: Official dashboard for government departments to post and manage applications directly.
 
+👥 Team Members (SIH 2025)<br>
 
-👥 Team Members (SIH 2025)
+Navya Vishwakarma (Project Lead & UI/UX)<br>
+Shivanshi Srivastava (Data Curation)<br>
+Shubham Verma (Frontend Developer)<br>
+Akshat Tyagi (Frontend Developer)<br>
+Arnav Kukreja (Backend Architect - Proposed)<br>
+Shrish Jaiswal (Content Strategy)<br>
 
-Navya Vishwakarma (Project Lead & UI/UX)
-Shivanshi Srivastava (Data Curation)
-Shubham Verma (Frontend Developer)
-Akshat Tyagi (Frontend Developer)
-Arnav Kukreja (Backend Architect - Proposed)
-Shrish Jaiswal (Content Strategy)
+📄 License<br>
 
-📄 License
-
-This project is developed for the Smart India Hackathon. All rights reserved by the team.
-“Bridging the gap between talent and public service.”
+This project is developed for the Smart India Hackathon. All rights reserved by the team.<br>
+“Bridging the gap between talent and public service.”<br>
