@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AvsarSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .search-bar-glow:focus-within { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4); }
+        .modal-scrollbar::-webkit-scrollbar, .chat-scrollbar::-webkit-scrollbar, .sidebar-scrollbar::-webkit-scrollbar { width: 6px; }
+        .modal-scrollbar::-webkit-scrollbar-track, .chat-scrollbar::-webkit-scrollbar-track, .sidebar-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .modal-scrollbar::-webkit-scrollbar-thumb, .chat-scrollbar::-webkit-scrollbar-thumb, .sidebar-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .modal-scrollbar::-webkit-scrollbar-thumb:hover, .chat-scrollbar::-webkit-scrollbar-thumb:hover, .sidebar-scrollbar::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+        
+        /* Sidebar Styles */
+        .sidebar-link { transition: all 0.2s ease-in-out; }
+        .sidebar-link:hover { background-color: #f3f4f6; color: #1f2937; transform: translateX(4px); }
+        .sidebar-active { background-color: #eef2ff; color: #4338ca; font-weight: 600; }
+        .sidebar-active:hover { background-color: #e0e7ff; transform: translateX(0); }
+        .category-submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+        .submenu-active { color: #4f46e5; font-weight: 600; border-left: 3px solid #4f46e5; padding-left: 0.75rem !important; background-color: #f3f4f6; }
+
+        /* Card Styles */
+        .card-border-it { border-top: 4px solid #3b82f6; }
+        .card-border-mgmt { border-top: 4px solid #10b981; }
+        .card-border-health { border-top: 4px solid #ef4444; }
+        .card-border-law { border-top: 4px solid #f59e0b; }
+        .not-relevant { opacity: 0.65; }
+
+        /* Chatbot Animations & Styles */
+        @keyframes slideInUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideOutDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
+        .chatbot-slide-in { animation: slideInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .chatbot-slide-out { animation: slideOutDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        
+        @keyframes messageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .new-message { animation: messageFadeIn 0.4s ease-in-out; }
+        
+        @keyframes typing { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
+        .typing-dot { animation: typing 1.4s infinite; }
+        .typing-dot:nth-child(2) { animation-delay: .2s; }
+        .typing-dot:nth-child(3) { animation-delay: .4s; }
+
+        /* Loader */
+        .loader { border-top-color: #4f46e5; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white shadow-lg flex-shrink-0 hidden md:flex flex-col">
+            <div class="p-6 border-b">
+                <a href="index.html" class="text-3xl font-bold text-indigo-600">AvsarSetu</a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto sidebar-scrollbar">
+                <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="mx-4 font-semibold">Home</span>
+                </a>
+                <a href="#" class="sidebar-filter-btn flex items-center px-4 py-3 rounded-lg text-gray-700 sidebar-active" data-category="For You">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    <span class="mx-4 font-semibold">For You</span>
+                </a>
+                <a href="#" class="sidebar-filter-btn flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link" data-category="Saved">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <span class="mx-4 font-semibold">Saved Internships</span>
+                </a>
+                <!-- <a href="notifications.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span class="mx-4 font-semibold">Notification</span>
+                </a> -->
+
+                <a href="notifications.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span class="mx-4 font-semibold">Notification</span>
+                </a>
+                 <div>
+                    <button id="categories-toggle" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <span class="mx-4 font-semibold">Categories</span>
+                        </div>
+                        <svg id="categories-arrow" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="categories-submenu" class="category-submenu pl-4 space-y-1 mt-1">
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Science & IT">Science & IT</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Management & Finance">Management & Finance</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Healthcare">Healthcare</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Public Policy & Law">Public Policy & Law</a>
+                    </div>
+                </div>
+                 <a href="skill-report.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <span class="mx-4 font-semibold">Skill Report</span>
+                </a>
+                 <a href="courses.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span class="mx-4 font-semibold">Upskilling Courses</span>
+                </a>
+            </nav>
+            <div class="mt-auto p-4 border-t">
+                <a href="settings.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="mx-4 font-semibold">Settings</span>
+                </a>
+                 <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H3"></path></svg>
+                    <span class="mx-4 font-semibold">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header for mobile -->
+            <header class="bg-white shadow-md md:hidden">
+                 <div class="flex justify-between items-center px-6 py-4">
+                     <a href="index.html" class="text-2xl font-bold text-indigo-600">AvsarSetu</a>
+                    <button id="mobile-menu-button" class="text-gray-500 focus:outline-none focus:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </header>
+            
+            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+                <!-- AI Search Section -->
+                <section class="mb-10 p-8 bg-white rounded-2xl shadow-lg">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Your AI Internship Co-Pilot</h1>
+                    <p class="text-gray-600 mb-6">Describe your ideal internship, and let our AI find it for you.</p>
+                    <div class="relative search-bar-glow rounded-full transition-shadow duration-300">
+                        <input type="text" id="ai-search-input" placeholder="e.g., 'AI research in Delhi for 3 months with a good stipend'" class="w-full text-lg pl-6 pr-32 py-5 text-gray-700 bg-gray-100 border border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button id="ai-search-button" class="absolute inset-y-0 right-0 mr-2 my-2 px-8 bg-indigo-600 text-white font-semibold rounded-full hover:bg-indigo-700 transition">Search</button>
+                    </div>
+                    <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                        <span class="font-semibold text-gray-600 self-center">Try:</span>
+                        <button class="prompt-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-1 px-3 rounded-full">Remote cybersecurity</button>
+                        <button class="prompt-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-1 px-3 rounded-full">ISRO internships in Bangalore</button>
+                        <button class="prompt-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-1 px-3 rounded-full">Policy research for law students</button>
+                    </div>
+                </section>
+                
+                <!-- Main Content Area -->
+                <div id="main-content-area">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 id="content-title" class="text-2xl font-bold text-gray-800">For You: Top AI Matches</h2>
+                    </div>
+                    
+                    <!-- Loader -->
+                    <div id="loader" class="text-center py-20 hidden">
+                        <div class="w-16 h-16 border-4 border-gray-200 border-t-indigo-600 rounded-full animate-spin mx-auto"></div>
+                        <p class="mt-4 text-gray-600">Finding best opportunities...</p>
+                    </div>
+
+                    <div id="no-results" class="text-center py-20 hidden">
+                        <svg class="w-24 h-24 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="mt-4 text-xl font-semibold text-gray-600">No Internships Found</p>
+                        <p class="text-gray-500">Try adjusting your search query to be more general.</p>
+                    </div>
+
+                    <div id="internship-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Internship cards will be dynamically inserted here -->
+                    </div>
+                    <div id="load-more-container" class="text-center mt-8">
+                        <button id="load-more-btn" class="bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center mx-auto">
+                            <span class="btn-text">Load More Internships</span>
+                            <svg class="w-5 h-5 ml-2 animate-spin hidden btn-loader" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Internship Details Modal -->
+    <div id="details-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-5/6 flex flex-col">
+            <div class="p-6 flex justify-between items-center border-b"><h3 id="modal-title" class="text-2xl font-bold text-gray-800"></h3><button id="close-modal-button" class="text-gray-400 hover:text-gray-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
+            <div class="p-6 overflow-y-auto modal-scrollbar flex-grow"><p id="modal-department" class="text-indigo-600 font-semibold mb-4"></p><div id="modal-description" class="text-gray-600 mb-6"></div><h4 class="text-lg font-bold text-gray-800 mb-2">Key Responsibilities</h4><ul id="modal-responsibilities" class="list-disc list-inside text-gray-600 mb-6 space-y-1"></ul><h4 class="text-lg font-bold text-gray-800 mb-2">Skills Required</h4><div id="modal-skills" class="flex flex-wrap gap-2 mb-6"></div><h4 class="text-lg font-bold text-gray-800 mb-2">Eligibility</h4><p id="modal-eligibility" class="text-gray-600 mb-6"></p><div class="grid grid-cols-2 gap-4 text-sm"><div><p class="font-bold">Location:</p><p id="modal-location"></p></div><div><p class="font-bold">Stipend:</p><p id="modal-stipend"></p></div><div><p class="font-bold">Duration:</p><p id="modal-duration"></p></div><div><p class="font-bold">Posted On:</p><p id="modal-posted"></p></div></div></div>
+            <div class="p-6 border-t flex items-center justify-between"><button id="modal-save-button" class="p-3 bg-gray-200 rounded-lg text-gray-600 hover:bg-gray-300"></button><button id="modal-apply-button" class="flex-1 ml-4 bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition">Apply Now</button></div>
+        </div>
+    </div>
+    
+    <!-- Chatbot -->
+    <div class="fixed bottom-5 right-5 z-40">
+        <button id="chatbot-toggle" class="bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-110">
+            <svg id="chat-icon-open" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            <svg id="chat-icon-close" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+     <div id="chatbot-window-container" class="fixed bottom-24 right-5 z-40" style="display: none;">
+         <div id="chatbot-window" class="w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white rounded-t-2xl flex items-center space-x-3">
+                <div class="bg-white p-1 rounded-full"><svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
+                <h3 class="font-bold text-lg">AvsarSetu Assistant</h3>
+            </div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto chat-scrollbar space-y-4">
+                 <div class="new-message"><div class="flex items-start gap-2.5"><div class="flex flex-col gap-1 w-full max-w-xs"><div class="flex items-center space-x-2 rtl:space-x-reverse"><span class="text-sm font-semibold text-gray-900">AI Assistant</span></div><div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl"><p class="text-sm font-normal text-gray-900">Hello! I'm your AI assistant. How can I help you find your dream government internship?</p></div></div></div></div>
+            </div>
+            <form id="chat-form" class="p-4 border-t">
+                <div class="flex space-x-2">
+                    <input type="text" id="chat-input" placeholder="Ask something..." class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', () => { document.getElementById('mobile-menu').classList.toggle('hidden'); });
+            
+            // User's skills - This would come from the database after login
+            const userSkills = ['Python', 'Data Science', 'Machine Learning', 'Java'];
+
+            // Internship Data
+            const internships = [
+                 // Science & IT
+                { id: 1, category: 'Science & IT', title: 'AI/ML Intern', department: 'NITI Aayog', location: 'Delhi (Hybrid)', stipend: '₹15,000 / month', applyLink: 'https://www.niti.gov.in/careers', description: 'Work on cutting-edge AI projects that influence national policy.', responsibilities: ['Develop and train machine learning models for various government initiatives.', 'Analyze large datasets to extract meaningful insights.', 'Collaborate with policy makers to integrate AI solutions.'], skillsRequired: ['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn'], eligibility: 'Currently pursuing or recently completed B.Tech/M.Tech in Computer Science, AI, or related fields.', duration: '3 Months', postedDate: '10 Sep 2025' },
+                { id: 2, category: 'Science & IT', title: 'Cyber Security Analyst', department: 'National Informatics Centre (NIC)', location: 'Remote', stipend: '₹20,000 / month', applyLink: 'https://www.nic.in/career/', description: 'Be a part of the team protecting India\'s critical digital infrastructure from cyber threats.', responsibilities: ['Monitor network traffic for suspicious activity using SIEM tools.', 'Conduct regular vulnerability assessments and penetration testing.', 'Respond to and investigate security incidents.'], skillsRequired: ['Networking', 'SIEM', 'Penetration Testing', 'Linux'], eligibility: 'B.Tech in CS/IT with a focus on cybersecurity.', duration: '6 Months', postedDate: '09 Sep 2025' },
+                { id: 3, category: 'Science & IT', title: 'Data Science Intern', department: 'Ministry of Statistics', location: 'Bangalore', stipend: '₹12,000 / month', applyLink: 'https://mospi.gov.in/work-in-mospi', description: 'Dive deep into national-level datasets to understand and report on the Indian economy and population.', responsibilities: ['Clean, process, and manage large government datasets.', 'Create insightful data visualizations and dashboards.', 'Apply statistical models to generate reports.'], skillsRequired: ['R', 'SQL', 'Tableau', 'Statistics'], eligibility: 'BSc/MSc in Statistics, Economics, or Data Science.', duration: '6 Months', postedDate: '08 Sep 2025' },
+                { id: 4, category: 'Science & IT', title: 'Aerospace Engineering', department: 'ISRO', location: 'Bangalore', stipend: '₹22,000 / month', applyLink: 'https://www.isro.gov.in/careers', description: 'A golden opportunity to be a part of India\'s celebrated space program.', responsibilities: ['Assist in the structural design and analysis of satellite components.', 'Participate in propulsion system simulations.', 'Contribute to mission planning and analysis.'], skillsRequired: ['Aerodynamics', 'MATLAB', 'CATIA', 'Thermodynamics'], eligibility: 'B.Tech/M.Tech in Aerospace or Mechanical Engineering.', duration: '6 Months', postedDate: '07 Sep 2025' },
+                { id: 5, category: 'Science & IT', title: 'Web Development Intern', department: 'MyGov India', location: 'Remote', stipend: '₹18,000 / month', applyLink: 'https://www.mygov.in/work-at-mygov/', description: 'Help build and maintain high-traffic digital platforms that engage millions of Indian citizens.', responsibilities: ['Develop responsive front-end components using React.js.', 'Build and maintain RESTful APIs using Node.js.', 'Ensure cross-browser compatibility and optimal performance.'], skillsRequired: ['HTML/CSS', 'JavaScript', 'React.js', 'Node.js'], eligibility: 'Final year B.Tech students in CS/IT.', duration: '3 Months', postedDate: '06 Sep 2025' },
+                { id: 6, category: 'Science & IT', title: 'Defense Tech Research', department: 'DRDO', location: 'Pune', stipend: '₹25,000 / month', applyLink: 'https://www.drdo.gov.in/careers', description: 'Contribute to next-gen defense tech.', responsibilities: ['Conduct literature reviews.', 'Assist in lab experiments.'], skillsRequired: ['Signal Processing', 'C++'], eligibility: 'B.Tech/M.Tech in ECE/Electrical.', duration: '6 Months', postedDate: '05 Sep 2025' },
+                { id: 13, category: 'Science & IT', title: 'Quantum Computing Research', department: 'C-DAC', location: 'Pune', stipend: '₹24,000 / month', applyLink: '#', description: 'Explore the future of computing.', responsibilities: ['Simulate quantum algorithms.', 'Research quantum hardware.'], skillsRequired: ['Quantum Mechanics', 'Python'], eligibility: 'M.Tech/PhD in Physics/CS.', duration: '6 Months', postedDate: '04 Sep 2025' },
+                { id: 14, category: 'Science & IT', title: 'Geospatial Data Analyst', department: 'NRSC', location: 'Hyderabad', stipend: '₹16,000 / month', applyLink: '#', description: 'Work with satellite imagery and GIS data.', responsibilities: ['Process satellite images.', 'Create thematic maps.'], skillsRequired: ['GIS', 'Erdas Imagine', 'Python'], eligibility: 'M.Tech in Geoinformatics.', duration: '4 Months', postedDate: '03 Sep 2025' },
+                { id: 15, category: 'Science & IT', title: 'Blockchain Developer', department: 'MeitY', location: 'Remote', stipend: '₹21,000 / month', applyLink: '#', description: 'Develop blockchain solutions for governance.', responsibilities: ['Write smart contracts.', 'Build DApps.'], skillsRequired: ['Solidity', 'Ethereum', 'Web3.js'], eligibility: 'Experience with blockchain tech.', duration: '5 Months', postedDate: '02 Sep 2025' },
+                { id: 16, category: 'Science & IT', title: 'Nuclear Science Intern', department: 'BARC', location: 'Mumbai', stipend: '₹20,000 / month', applyLink: '#', description: 'Internship at India\'s premier nuclear research facility.', responsibilities: ['Assist in nuclear physics experiments.', 'Analyze simulation data.'], skillsRequired: ['Nuclear Physics', 'C++'], eligibility: 'MSc Physics students.', duration: '6 Months', postedDate: '01 Sep 2025' },
+                { id: 17, category: 'Science & IT', title: 'Software Testing Intern', department: 'STPI', location: 'Noida', stipend: '₹15,000 / month', applyLink: '#', description: 'Ensure the quality of government software projects.', responsibilities: ['Write test cases.', 'Perform manual and automated testing.'], skillsRequired: ['QA Testing', 'Selenium'], eligibility: 'BCA/B.Tech students.', duration: '3 Months', postedDate: '31 Aug 2025' },
+                { id: 18, category: 'Science & IT', title: 'Cloud Computing Intern', department: 'NIC', location: 'Delhi', stipend: '₹19,000 / month', applyLink: '#', description: 'Work on the MeghRaj Government Cloud initiative.', responsibilities: ['Manage cloud resources.', 'Deploy applications on cloud.'], skillsRequired: ['AWS/Azure', 'Docker', 'Kubernetes'], eligibility: 'B.Tech in CS/IT.', duration: '6 Months', postedDate: '30 Aug 2025' },
+                // Management & Finance
+                { id: 19, category: 'Management & Finance', title: 'Economic Research Intern', department: 'RBI', location: 'Mumbai', stipend: '₹35,000 / month', applyLink: '#', description: 'A prestigious internship for economics students.', responsibilities: ['Analyze monetary policy.', 'Study financial markets.'], skillsRequired: ['Economics', 'Statistics', 'EViews'], eligibility: 'MA/PhD in Economics.', duration: '3 Months', postedDate: '10 Sep 2025' },
+                { id: 20, category: 'Management & Finance', title: 'Project Management Intern', department: 'NITI Aayog', location: 'New Delhi', stipend: '₹15,000 / month', applyLink: '#', description: 'Oversee the implementation of national projects.', responsibilities: ['Track project milestones.', 'Coordinate with ministries.'], skillsRequired: ['Project Management', 'MS Project'], eligibility: 'MBA students.', duration: '2 Months', postedDate: '09 Sep 2025' },
+                { id: 21, category: 'Management & Finance', title: 'Airport Management Trainee', department: 'AAI', location: 'Various', stipend: '₹25,000 / month', applyLink: '#', description: 'Learn the ins and outs of airport operations.', responsibilities: ['Shadow airport managers.', 'Learn about air traffic control.'], skillsRequired: ['Management', 'Operations'], eligibility: 'MBA in Aviation Management.', duration: '6 Months', postedDate: '08 Sep 2025' },
+                { id: 22, category: 'Management & Finance', title: 'Supply Chain Intern', department: 'FCI', location: 'Various', stipend: '₹16,000 / month', applyLink: '#', description: 'Manage the supply chain of food grains.', responsibilities: ['Monitor warehouse stocks.', 'Analyze logistics.'], skillsRequired: ['Supply Chain', 'Logistics'], eligibility: 'MBA in Operations/SCM.', duration: '4 Months', postedDate: '07 Sep 2025' },
+                { id: 23, category: 'Management & Finance', title: 'Smart City Project Intern', department: 'Ministry of Urban Affairs', location: 'Pune', stipend: '₹18,000 / month', applyLink: 'https://smartcities.gov.in/internships', description: 'Work on innovative urban development projects.', responsibilities: ['Monitor project progress.', 'Assist in preparing reports.'], skillsRequired: ['Project Management', 'Urban Planning'], eligibility: 'Students of Civil Engg, Urban Planning.', duration: '6 Months', postedDate: '30 Aug 2025' },
+                { id: 24, category: 'Management & Finance', title: 'HR Intern', department: 'GAIL', location: 'New Delhi', stipend: '₹17,000 / month', applyLink: '#', description: 'Assist the HR department in a leading Maharatna PSU.', responsibilities: ['Support recruitment drives', 'Manage employee databases', 'Organize training sessions'], skillsRequired: ['MS Office', 'Communication', 'HR Principles'], eligibility: 'MBA in HR.', duration: '3 Months', postedDate: '29 Aug 2025' },
+                { id: 25, category: 'Management & Finance', title: 'Corporate Affairs Intern', department: 'Ministry of Corporate Affairs', location: 'New Delhi', stipend: '₹10,000 / month', applyLink: '#', description: 'Get a first-hand look at corporate law and governance.', responsibilities: ['Research company law cases', 'Assist in policy formulation', 'Prepare reports on corporate trends'], skillsRequired: ['Corporate Law', 'Research', 'MS Excel'], eligibility: 'Students of Law, CA, CS.', duration: '2 Months', postedDate: '28 Aug 2025' },
+                { id: 26, category: 'Management & Finance', title: 'Invest India Fellowship', department: 'Invest India', location: 'New Delhi', stipend: '₹40,000 / month', applyLink: '#', description: 'Work with the national investment promotion agency.', responsibilities: ['Analyze investment trends', 'Prepare sector-specific reports', 'Engage with stakeholders'], skillsRequired: ['Financial Modeling', 'Market Research', 'Analytics'], eligibility: 'MBA, Masters in Economics/Finance.', duration: '6 Months', postedDate: '27 Aug 2025' },
+                // Healthcare
+                { id: 31, category: 'Healthcare', title: 'Public Health Intern', department: 'Ministry of Health', location: 'Remote', stipend: '₹12,000 / month', applyLink: '#', description: 'Work on national health missions.', responsibilities: ['Analyze health data.', 'Create awareness materials.'], skillsRequired: ['Public Health', 'Data Analysis'], eligibility: 'Students of Medicine, Public Health.', duration: '3 Months', postedDate: '03 Sep 2025' },
+                { id: 32, category: 'Healthcare', title: 'Medical Research Assistant', department: 'ICMR', location: 'New Delhi', stipend: '₹20,000 / month', applyLink: '#', description: 'Contribute to pivotal medical research in India.', responsibilities: ['Assist in clinical trials.', 'Collect and analyze data.'], skillsRequired: ['Medical Research', 'Statistics'], eligibility: 'MBBS/BDS students.', duration: '6 Months', postedDate: '02 Sep 2025' },
+                { id: 35, category: 'Healthcare', title: 'Healthcare Management Intern', department: 'AIIMS Delhi', location: 'New Delhi', stipend: '₹15,000 / month', applyLink: '#', description: 'Learn hospital administration at one of India\'s premier medical institutions.', responsibilities: ['Shadow hospital administrators', 'Analyze patient workflow', 'Assist in quality control'], skillsRequired: ['Hospital Management', 'Operations'], eligibility: 'Masters in Hospital Administration.', duration: '4 Months', postedDate: '26 Aug 2025' },
+                { id: 36, category: 'Healthcare', title: 'Food Safety Intern', department: 'FSSAI', location: 'Various', stipend: '₹10,000 / month', applyLink: '#', description: 'Ensure the safety and quality of food products in India.', responsibilities: ['Assist in food sample analysis', 'Review food safety regulations', 'Participate in awareness campaigns'], skillsRequired: ['Food Technology', 'Microbiology'], eligibility: 'B.Tech/M.Sc in Food Technology.', duration: '3 Months', postedDate: '25 Aug 2025' },
+                { id: 37, category: 'Healthcare', title: 'Ayurveda Research Intern', department: 'Ministry of AYUSH', location: 'Remote', stipend: '₹12,000 / month', applyLink: '#', description: 'Contribute to the scientific validation of traditional Indian medicine.', responsibilities: ['Conduct literature reviews on herbs', 'Analyze clinical data', 'Prepare research papers'], skillsRequired: ['Ayurveda', 'Research Methodology'], eligibility: 'BAMS/MD students.', duration: '6 Months', postedDate: '24 Aug 2025' },
+                // Public Policy & Law
+                { id: 33, category: 'Public Policy & Law', title: 'Foreign Policy Research', department: 'MEA', location: 'New Delhi', stipend: '₹10,000 / month', applyLink: '#', description: 'Work at the heart of Indian diplomacy.', responsibilities: ['Research geopolitical issues.', 'Prepare briefs for diplomats.'], skillsRequired: ['International Relations', 'Research'], eligibility: 'Master\'s in Political Science/IR.', duration: '3 Months', postedDate: '04 Sep 2025' },
+                { id: 34, category: 'Public Policy & Law', title: 'Legal Intern', department: 'Law Commission of India', location: 'New Delhi', stipend: '₹10,000 / month', applyLink: '#', description: 'Assist in legal research and law reforms.', responsibilities: ['Research case laws.', 'Draft legal notes.'], skillsRequired: ['Legal Research', 'Drafting'], eligibility: 'Law students (LLB/LLM).', duration: '2 Months', postedDate: '01 Sep 2025' },
+                { id: 38, category: 'Public Policy & Law', title: 'Legislative Research Assistant', department: 'PRS Legislative Research', location: 'New Delhi', stipend: '₹25,000 / month', applyLink: '#', description: 'Work directly with Members of Parliament to support their legislative work.', responsibilities: ['Draft parliamentary questions', 'Analyze bills and policies', 'Prepare research notes'], skillsRequired: ['Public Policy', 'Law', 'Economics'], eligibility: 'Highly motivated graduates from any discipline.', duration: '11 Months', postedDate: '23 Aug 2025' },
+                { id: 39, category: 'Public Policy & Law', title: 'Human Rights Intern', department: 'NHRC', location: 'New Delhi', stipend: '₹8,000 / month', applyLink: '#', description: 'Work on the protection and promotion of human rights in India.', responsibilities: ['Investigate complaints', 'Conduct field research', 'Organize workshops'], skillsRequired: ['Human Rights Law', 'Social Work'], eligibility: 'Students of Law, Social Sciences.', duration: '2 Months', postedDate: '22 Aug 2025' },
+                { id: 40, category: 'Public Policy & Law', title: 'Competition Law Intern', department: 'Competition Commission of India', location: 'New Delhi', stipend: '₹15,000 / month', applyLink: '#', description: 'Promote and sustain competition in markets.', responsibilities: ['Analyze anti-competitive cases', 'Research international competition law', 'Assist in advocacy efforts'], skillsRequired: ['Competition Law', 'Economics'], eligibility: 'Students of Law/Economics.', duration: '3 Months', postedDate: '21 Aug 2025' },
+                ...Array.from({ length: 40 }, (_, i) => ({ id: 41 + i, category: ['Management & Finance', 'Healthcare', 'Public Policy & Law', 'Science & IT'][i % 4], title: `Policy Analyst Intern ${i+1}`, department: `Think Tank ${i+1}`, location: 'Various', stipend: `₹${12000 + i*500} / month`, applyLink: '#', description: 'A sample policy analysis internship for graduates.', responsibilities: ['Analyze government policies.', 'Write policy briefs.'], skillsRequired: ['Research', 'Writing'], eligibility: 'Any graduate', duration: '3 Months', postedDate: '20 Aug 2025' }))
+            ];
+            
+            let savedInternships = JSON.parse(localStorage.getItem('savedInternships')) || [];
+            const internshipGrid = document.getElementById('internship-grid');
+            const modal = document.getElementById('details-modal');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const loadMoreContainer = document.getElementById('load-more-container');
+            const loader = document.getElementById('loader');
+            const contentTitle = document.getElementById('content-title');
+            const noResultsDiv = document.getElementById('no-results');
+            const searchInput = document.getElementById('ai-search-input');
+            const promptButtons = document.querySelectorAll('.prompt-btn');
+
+            let itemsPerPage = 12;
+            let currentPage = 1;
+            let currentFilter = 'For You';
+            let currentInternshipList = [];
+            let searchDebounce;
+            
+            function calculateMatchScore(internship) {
+                const requiredSkills = (internship.skillsRequired || []).map(s => s.toLowerCase());
+                const userSkillsLower = userSkills.map(s => s.toLowerCase());
+                
+                const matchedSkills = requiredSkills.filter(skill => userSkillsLower.includes(skill));
+                
+                let isRelevant = true;
+                if (requiredSkills.length > 0 && matchedSkills.length === 0) {
+                    isRelevant = false;
+                }
+
+                const score = requiredSkills.length > 0 ? (matchedSkills.length / requiredSkills.length) * 100 : 50;
+                
+                // Make scores look more realistic
+                const finalScore = Math.min(Math.floor(60 + score * 0.4), 98);
+
+                return { score: finalScore, relevant: isRelevant };
+            }
+
+            function isSaved(internshipId) { return savedInternships.includes(internshipId); }
+            
+            function toggleSave(internshipId, saveButton) {
+                const index = savedInternships.indexOf(internshipId);
+                if (index > -1) { 
+                    savedInternships.splice(index, 1);
+                    saveButton.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>`;
+                } else { 
+                    savedInternships.push(internshipId);
+                    saveButton.innerHTML = `<svg class="w-6 h-6" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>`;
+                }
+                localStorage.setItem('savedInternships', JSON.stringify(savedInternships));
+            }
+
+            function renderInternships(list, loadMore = false) {
+                if (!loadMore) {
+                    internshipGrid.innerHTML = '';
+                }
+                
+                const start = (currentPage - 1) * itemsPerPage;
+                const end = currentPage * itemsPerPage;
+                
+                const itemsToRender = list.slice(start, end);
+                itemsToRender.forEach(internship => {
+                    const { score, relevant } = calculateMatchScore(internship);
+                    const matchScoreColor = score >= 90 ? 'green' : (score >= 75 ? 'yellow' : 'red');
+                    const saved = isSaved(internship.id);
+                    const categoryClass = internship.category === 'Science & IT' ? 'card-border-it'
+                                    : internship.category === 'Management & Finance' ? 'card-border-mgmt'
+                                    : internship.category === 'Healthcare' ? 'card-border-health'
+                                    : 'card-border-law';
+
+                    const cardHTML = `
+                    <div class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-lg hover:-translate-y-1 transition-all ${categoryClass} ${!relevant ? 'not-relevant' : ''}">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-gray-900 pr-2">${internship.title}</h3>
+                                <button class="save-btn p-1 text-gray-400 hover:text-red-500" data-id="${internship.id}">
+                                    <svg class="w-6 h-6" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                                </button>
+                            </div>
+                            <p class="text-indigo-600 font-semibold mb-2">${internship.department}</p>
+                            ${relevant ? 
+                                `<span class="bg-${matchScoreColor}-100 text-${matchScoreColor}-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 inline-block">${score}% Match</span>` :
+                                `<span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 inline-block">Not a direct match</span>`
+                            }
+                            <div class="text-sm text-gray-500 space-y-1">
+                                <p><strong>Location:</strong> ${internship.location}</p>
+                                <p><strong>Stipend:</strong> ${internship.stipend}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <button class="apply-now-btn w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700" data-link="${internship.applyLink}">Apply Now</button>
+                            <button class="view-details-btn w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300" data-id="${internship.id}">View Details</button>
+                        </div>
+                    </div>`;
+                    internshipGrid.innerHTML += cardHTML;
+                });
+
+                noResultsDiv.classList.toggle('hidden', list.length > 0);
+                if (end >= list.length) {
+                    loadMoreContainer.classList.add('hidden');
+                } else {
+                    loadMoreContainer.classList.remove('hidden');
+                }
+            }
+            
+            function performSearch(query) {
+                loader.classList.remove('hidden');
+                internshipGrid.classList.add('hidden');
+                loadMoreContainer.classList.add('hidden');
+                noResultsDiv.classList.add('hidden');
+
+                setTimeout(() => {
+                    currentPage = 1;
+                    const queryWords = query.toLowerCase().split(' ').filter(w => w);
+                    
+                    if (queryWords.length === 0) {
+                        currentInternshipList = [...internships].sort((a,b) => calculateMatchScore(b).score - calculateMatchScore(a).score);
+                        contentTitle.textContent = 'For You: Top AI Matches';
+                    } else {
+                         currentInternshipList = internships.filter(internship => {
+                            const searchableText = [
+                                internship.title,
+                                internship.department,
+                                internship.location,
+                                internship.description,
+                                ...internship.skillsRequired
+                            ].join(' ').toLowerCase();
+                            return queryWords.every(word => searchableText.includes(word));
+                        });
+                        contentTitle.textContent = `Search Results for "${query}"`;
+                    }
+                    
+                    loader.classList.add('hidden');
+                    internshipGrid.classList.remove('hidden');
+                    renderInternships(currentInternshipList);
+                }, 500);
+            }
+
+            function handleFilter(filter, loadMore = false) {
+                 if (!loadMore) {
+                    loader.classList.remove('hidden');
+                    internshipGrid.classList.add('hidden');
+                    loadMoreContainer.classList.add('hidden');
+                    noResultsDiv.classList.add('hidden');
+                    searchInput.value = "";
+                } else {
+                    const btnText = loadMoreBtn.querySelector('.btn-text');
+                    const btnLoader = loadMoreBtn.querySelector('.btn-loader');
+                    btnText.classList.add('hidden');
+                    btnLoader.classList.remove('hidden');
+                }
+                
+                setTimeout(() => {
+                    if (!loadMore) {
+                        currentPage = 1; 
+                        currentFilter = filter;
+                        contentTitle.textContent = filter === 'For You' ? 'For You: Top AI Matches' : (filter === 'Saved' ? 'Your Saved Internships' : `${filter} Internships`);
+                        
+                        if(filter === 'For You') {
+                            currentInternshipList = [...internships].sort((a,b) => calculateMatchScore(b).score - calculateMatchScore(a).score);
+                        } else if (filter === 'Saved') {
+                            currentInternshipList = internships.filter(i => savedInternships.includes(i.id));
+                        } else {
+                            currentInternshipList = internships.filter(i => i.category === filter);
+                        }
+                    }
+                    
+                    renderInternships(currentInternshipList, loadMore);
+
+                    if (loadMore) {
+                        const btnText = loadMoreBtn.querySelector('.btn-text');
+                        const btnLoader = loadMoreBtn.querySelector('.btn-loader');
+                        btnText.classList.remove('hidden');
+                        btnLoader.classList.add('hidden');
+                    } else {
+                        loader.classList.add('hidden');
+                        internshipGrid.classList.remove('hidden');
+                    }
+                }, 500);
+            }
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchDebounce);
+                searchDebounce = setTimeout(() => {
+                    document.querySelectorAll('.sidebar-filter-btn').forEach(l => {
+                        l.classList.remove('sidebar-active');
+                        l.classList.remove('submenu-active');
+                    });
+                     document.getElementById('categories-toggle').classList.remove('sidebar-active');
+                    performSearch(searchInput.value);
+                }, 500);
+            });
+            
+            promptButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    searchInput.value = btn.textContent;
+                    performSearch(searchInput.value);
+                })
+            });
+
+            loadMoreBtn.addEventListener('click', () => { 
+                currentPage++;
+                handleFilter(currentFilter, true);
+            });
+            
+            internshipGrid.addEventListener('click', (e) => {
+                const saveButton = e.target.closest('.save-btn');
+                if (saveButton) {
+                    toggleSave(parseInt(saveButton.dataset.id), saveButton.querySelector('svg'));
+                }
+                const viewDetailsButton = e.target.closest('.view-details-btn');
+                if(viewDetailsButton) {
+                    openDetailsModal(parseInt(viewDetailsButton.dataset.id));
+                }
+                const applyNowButton = e.target.closest('.apply-now-btn');
+                if(applyNowButton){
+                     window.open(applyNowButton.dataset.link, '_blank');
+                }
+            });
+
+            function openDetailsModal(internshipId) {
+                const internship = internships.find(i => i.id === internshipId);
+                if (!internship) return;
+                document.getElementById('modal-title').textContent = internship.title;
+                document.getElementById('modal-department').textContent = internship.department;
+                document.getElementById('modal-description').textContent = internship.description;
+                const respList = document.getElementById('modal-responsibilities');
+                respList.innerHTML = '';
+                internship.responsibilities.forEach(r => { const li = document.createElement('li'); li.textContent = r; respList.appendChild(li); });
+                const skillsContainer = document.getElementById('modal-skills');
+                skillsContainer.innerHTML = '';
+                internship.skillsRequired.forEach(s => { const span = document.createElement('span'); span.className = 'bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1 rounded-full'; span.textContent = s; skillsContainer.appendChild(span); });
+                document.getElementById('modal-eligibility').textContent = internship.eligibility;
+                document.getElementById('modal-location').textContent = internship.location;
+                document.getElementById('modal-stipend').textContent = internship.stipend;
+                document.getElementById('modal-duration').textContent = internship.duration;
+                document.getElementById('modal-posted').textContent = internship.postedDate;
+                const modalApplyBtn = document.getElementById('modal-apply-button');
+                modalApplyBtn.onclick = () => window.open(internship.applyLink, '_blank');
+                
+                const modalSaveBtn = document.getElementById('modal-save-button');
+                const saved = isSaved(internship.id);
+                modalSaveBtn.innerHTML = `<svg class="w-6 h-6" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>`;
+                modalSaveBtn.onclick = () => {
+                    toggleSave(internship.id, modalSaveBtn.querySelector('svg'));
+                    // Also update the icon on the main card
+                    const mainCardSaveButton = internshipGrid.querySelector(`.save-btn[data-id="${internship.id}"] svg`);
+                    if(mainCardSaveButton) {
+                         mainCardSaveButton.setAttribute('fill', isSaved(internship.id) ? 'currentColor' : 'none');
+                    }
+                };
+                modal.classList.remove('hidden');
+            }
+            closeModalButton.addEventListener('click', () => modal.classList.add('hidden'));
+            window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+            // Sidebar Logic
+            const sidebarLinks = document.querySelectorAll('.sidebar-filter-btn');
+            const subMenuLinks = document.querySelectorAll('#categories-submenu a');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-link, .sidebar-filter-btn').forEach(l => l.classList.remove('sidebar-active'));
+                    subMenuLinks.forEach(sl => sl.classList.remove('submenu-active'));
+
+                    this.classList.add('sidebar-active');
+                    if(this.parentElement.id === 'categories-submenu'){
+                        document.getElementById('categories-toggle').classList.add('sidebar-active');
+                        this.classList.add('submenu-active');
+                        this.classList.remove('sidebar-active');
+                    } else {
+                         document.getElementById('categories-toggle').classList.remove('sidebar-active');
+                    }
+
+                    handleFilter(this.dataset.category);
+                });
+            });
+
+            // Categories dropdown
+            const categoriesToggle = document.getElementById('categories-toggle');
+            const categoriesSubmenu = document.getElementById('categories-submenu');
+            const categoriesArrow = document.getElementById('categories-arrow');
+            categoriesToggle.addEventListener('click', () => {
+                if (categoriesSubmenu.style.maxHeight) {
+                    categoriesSubmenu.style.maxHeight = null;
+                    categoriesArrow.classList.remove('rotate-180');
+                } else {
+                    categoriesSubmenu.style.maxHeight = categoriesSubmenu.scrollHeight + "px";
+                    categoriesArrow.classList.add('rotate-180');
+                }
+            });
+
+             // Chatbot Logic
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatbotWindowContainer = document.getElementById('chatbot-window-container');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const chatIconOpen = document.getElementById('chat-icon-open');
+            const chatIconClose = document.getElementById('chat-icon-close');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+            
+            chatbotToggle.addEventListener('click', () => {
+                const isHidden = chatbotWindowContainer.style.display === 'none';
+                if (isHidden) {
+                    chatbotWindowContainer.style.display = 'block';
+                    chatbotWindow.classList.remove('chatbot-slide-out');
+                    chatbotWindow.classList.add('chatbot-slide-in');
+                } else {
+                    chatbotWindow.classList.remove('chatbot-slide-in');
+                    chatbotWindow.classList.add('chatbot-slide-out');
+                    setTimeout(() => { chatbotWindowContainer.style.display = 'none'; }, 500);
+                }
+                chatIconOpen.classList.toggle('hidden');
+                chatIconClose.classList.toggle('hidden');
+            });
+
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, 'user');
+                    chatInput.value = '';
+                    getBotResponse(message);
+                }
+            });
+
+            function addMessage(message, sender) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.classList.add('new-message');
+
+                if (sender === 'user') {
+                    messageWrapper.innerHTML = `<div class="flex items-start gap-2.5 justify-end"><div class="flex flex-col gap-1 w-full max-w-xs"><div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-indigo-600 text-white rounded-s-xl rounded-ee-xl"><p class="text-sm font-normal">${message}</p></div></div></div>`;
+                } else if (sender === 'bot') {
+                    messageWrapper.innerHTML = `<div class="flex items-start gap-2.5"><div class="flex flex-col gap-1 w-full max-w-xs"><div class="flex items-center space-x-2 rtl:space-x-reverse"><span class="text-sm font-semibold text-gray-900">AI Assistant</span></div><div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl"><p class="text-sm font-normal text-gray-900">${message}</p></div></div></div>`;
+                } else { // typing indicator
+                     messageWrapper.innerHTML = `<div id="typing-indicator" class="flex items-start gap-2.5"><div class="flex flex-col gap-1 w-full max-w-xs"><div class="flex items-center space-x-2 rtl:space-x-reverse"><span class="text-sm font-semibold text-gray-900">AI Assistant</span></div><div class="flex items-center space-x-1 p-4"><div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div></div></div></div>`;
+                }
+                chatMessages.appendChild(messageWrapper);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function getBotResponse(userMessage) {
+                const msg = userMessage.toLowerCase();
+                let botMessage;
+
+                addMessage('', 'typing');
+
+                const qaPairs = {
+                    "what is avsarsetu": "AvsarSetu is an AI-powered platform designed to connect students with the best government internship opportunities across India.",
+                    "how does ai matching work": "Our AI analyzes your profile, skills, and preferences, then compares them against thousands of internships to find your perfect match, showing a 'Match Score' for each.",
+                    "is this free": "Yes, AvsarSetu is completely free for all students. Our goal is to make public service opportunities accessible to everyone.",
+                    "how do i update my profile": "You can update your information by clicking on the 'My Profile' link in the sidebar menu.",
+                    "thank you": "You're welcome! I'm here to help if you have any more questions.",
+                    "hello": "Hello there! How can I assist you with your internship search today?",
+                    "hi": "Hi! Feel free to ask me anything about finding internships on AvsarSetu.",
+                    "bye": "Goodbye! Best of luck with your applications."
+                };
+
+                const foundKey = Object.keys(qaPairs).find(key => msg.includes(key));
+                botMessage = foundKey ? qaPairs[foundKey] : "I'm not sure how to answer that. Try asking about 'how to search' or 'what is AvsarSetu'.";
+
+                setTimeout(() => {
+                    const typingIndicator = document.getElementById('typing-indicator');
+                    if (typingIndicator) typingIndicator.parentElement.remove();
+                    addMessage(botMessage, 'bot');
+                }, 1500);
+            }
+            
+            // Initial render
+            handleFilter('For You');
+        });
+    </script>
+</body>
+</html>
+

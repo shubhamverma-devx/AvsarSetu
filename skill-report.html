@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Report - AvsarSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .sidebar-scrollbar::-webkit-scrollbar { width: 6px; }
+        .sidebar-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .sidebar-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .sidebar-scrollbar::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+        
+        /* Sidebar Styles */
+        .sidebar-link { transition: all 0.2s ease-in-out; }
+        .sidebar-link:hover { background-color: #f3f4f6; color: #1f2937; transform: translateX(4px); }
+        .sidebar-active { background-color: #eef2ff; color: #4338ca; font-weight: 600; }
+        .sidebar-active:hover { background-color: #e0e7ff; transform: translateX(0); }
+        .category-submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+
+        /* Animation Styles */
+        .animated-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animated-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .animated-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .stagger-item {
+             opacity: 0;
+             transform: translateX(-20px);
+             transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white shadow-lg flex-shrink-0 hidden md:flex flex-col">
+            <div class="p-6 border-b">
+                <a href="index.html" class="text-3xl font-bold text-indigo-600">AvsarSetu</a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto sidebar-scrollbar">
+                <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="mx-4 font-semibold">Home</span>
+                </a>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    <span class="mx-4 font-semibold">For You</span>
+                </a>
+                 <!-- <a href="#" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <span class="mx-4 font-semibold">Saved Internships</span>
+                </a> -->
+
+                <a href="dashboard.html" class="sidebar-filter-btn flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link" data-category="Saved">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <span class="mx-4 font-semibold">Saved Internships</span>
+                </a>
+                <a href="notifications.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span class="mx-4 font-semibold">Notification</span>
+                </a>
+                 <!-- <div>
+                    <button id="categories-toggle" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <span class="mx-4 font-semibold">Categories</span>
+                        </div>
+                        <svg id="categories-arrow" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="categories-submenu" class="category-submenu pl-4 space-y-1 mt-1">
+                        <a href="dashboard.html" class="block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg">Science & IT</a>
+                    </div>
+                </div> -->
+
+                <div>
+                    <button id="categories-toggle" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <span class="mx-4 font-semibold">Categories</span>
+                        </div>
+                        <svg id="categories-arrow" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="categories-submenu" class="category-submenu pl-4 space-y-1 mt-1">
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Science & IT">Science & IT</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Management & Finance">Management & Finance</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Healthcare">Healthcare</a>
+                        <a href="#" class="sidebar-filter-btn block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg" data-category="Public Policy & Law">Public Policy & Law</a>
+                    </div>
+                </div>
+                 <a href="#" class="flex items-center px-4 py-3 rounded-lg sidebar-active">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <span class="mx-4 font-semibold">Skill Report</span>
+                </a>
+                 <a href="courses.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span class="mx-4 font-semibold">Upskilling Courses</span>
+                </a>
+            </nav>
+            <div class="mt-auto p-4 border-t">
+                 <a href="#" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="mx-4 font-semibold">Settings</span>
+                </a>
+                 <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H3"></path></svg>
+                    <span class="mx-4 font-semibold">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+                <!-- Header Section -->
+                <section class="mb-10 animated-card">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Your Personal Skill Report</h1>
+                    <p class="text-gray-600 mt-2">An AI-powered analysis of your skills against the current market demand.</p>
+                </section>
+                
+                <!-- Skill Overview & Gap Analysis -->
+                <section class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <!-- Left Panel: Charts -->
+                    <div class="lg:col-span-3 space-y-8">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg animated-card" style="transition-delay: 100ms;">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Your Skill Strength by Category</h3>
+                            <canvas id="skillRadarChart"></canvas>
+                        </div>
+                         <div class="bg-white p-6 rounded-2xl shadow-lg animated-card" style="transition-delay: 200ms;">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Top 10 In-Demand Skills</h3>
+                            <p class="text-sm text-gray-500 mb-4">Bars in <span class="text-indigo-600 font-semibold">indigo</span> are skills you already have.</p>
+                            <canvas id="skillBarChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Right Panel: Summary & Action -->
+                    <div class="lg:col-span-2 space-y-8">
+                         <div class="bg-white p-6 rounded-2xl shadow-lg animated-card" style="transition-delay: 300ms;">
+                             <h3 class="text-xl font-bold text-gray-800 mb-4">Your Current Skillset</h3>
+                             <div id="user-skills-list" class="flex flex-wrap gap-2">
+                                <!-- User skills will be dynamically inserted here -->
+                             </div>
+                        </div>
+                         <div class="bg-white p-6 rounded-2xl shadow-lg animated-card" style="transition-delay: 400ms;">
+                            <h3 class="text-xl font-bold text-amber-600 mb-4">Skills to Acquire</h3>
+                            <p class="text-sm text-gray-500 mb-4">Focus on these skills to become a top candidate.</p>
+                            <ul id="skills-to-acquire-list" class="space-y-3">
+                                <!-- Missing skills will be dynamically inserted here -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // User's skills (would come from DB)
+            const userSkills = ['Java', 'Python', 'Data Science'];
+            
+            // Full Internship Data (would come from DB)
+            const internships = [
+                // Science & IT
+                { id: 1, category: 'Science & IT', skillsRequired: ['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn'] },
+                { id: 2, category: 'Science & IT', skillsRequired: ['Networking', 'SIEM', 'Penetration Testing', 'Linux'] },
+                { id: 3, category: 'Science & IT', skillsRequired: ['R', 'SQL', 'Tableau', 'Statistics'] },
+                { id: 4, category: 'Science & IT', skillsRequired: ['Aerodynamics', 'MATLAB', 'CATIA'] },
+                { id: 5, category: 'Science & IT', skillsRequired: ['HTML/CSS', 'JavaScript', 'React.js', 'Node.js'] },
+                { id: 6, category: 'Science & IT', skillsRequired: ['Signal Processing', 'C++', 'Embedded Systems'] },
+                { id: 13, category: 'Science & IT', skillsRequired: ['Quantum Mechanics', 'Python'] },
+                 // Management & Finance
+                { id: 19, category: 'Management & Finance', skillsRequired: ['Economics', 'Statistics', 'EViews'] },
+                { id: 20, category: 'Management & Finance', skillsRequired: ['Project Management', 'MS Project'] },
+                { id: 21, category: 'Management & Finance', skillsRequired: ['Management', 'Operations'] },
+                { id: 22, category: 'Management & Finance', skillsRequired: ['Supply Chain', 'Logistics'] },
+                { id: 24, category: 'Management & Finance', skillsRequired: ['MS Office', 'Communication', 'HR Principles'] },
+                { id: 26, category: 'Management & Finance', skillsRequired: ['Financial Modeling', 'Market Research', 'Analytics'] },
+                // Healthcare
+                { id: 31, category: 'Healthcare', skillsRequired: ['Public Health', 'Data Analysis'] },
+                { id: 32, category: 'Healthcare', skillsRequired: ['Medical Research', 'Statistics'] },
+                { id: 35, category: 'Healthcare', skillsRequired: ['Hospital Management', 'Operations'] },
+                { id: 36, category: 'Healthcare', skillsRequired: ['Food Technology', 'Microbiology'] },
+                { id: 37, category: 'Healthcare', skillsRequired: ['Ayurveda', 'Research Methodology'] },
+                // Public Policy & Law
+                { id: 33, category: 'Public Policy & Law', skillsRequired: ['International Relations', 'Research'] },
+                { id: 34, category: 'Public Policy & Law', skillsRequired: ['Legal Research', 'Drafting'] },
+                { id: 38, category: 'Public Policy & Law', skillsRequired: ['Public Policy', 'Law', 'Economics'] },
+                { id: 39, category: 'Public Policy & Law', skillsRequired: ['Human Rights Law', 'Social Work'] },
+                { id: 40, category: 'Public Policy & Law', skillsRequired: ['Competition Law', 'Economics'] },
+            ];
+
+            const categories = ['Science & IT', 'Management & Finance', 'Healthcare', 'Public Policy & Law'];
+
+
+            
+            function getSkillsForCategory(category) {
+                const skills = new Set();
+                internships
+                    .filter(i => i.category === category)
+                    .forEach(i => (i.skillsRequired || []).forEach(s => skills.add(s.toLowerCase())));
+                return Array.from(skills);
+            }
+
+            function calculateStrength(userSkills, categorySkills) {
+                if (categorySkills.length === 0) return 0;
+                const userSkillsLower = userSkills.map(s => s.toLowerCase());
+                const matched = categorySkills.filter(s => userSkillsLower.includes(s));
+                return Math.round((matched.length / categorySkills.length) * 100);
+            }
+
+            function analyzeMarketSkills() {
+                const skillFrequency = new Map();
+                internships.forEach(internship => {
+                    (internship.skillsRequired || []).forEach(skill => {
+                        const s = skill.toLowerCase();
+                        skillFrequency.set(s, (skillFrequency.get(s) || 0) + 1);
+                    });
+                });
+                return Array.from(skillFrequency.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10) 
+                    .map(entry => entry[0]);
+            }
+            
+            function renderReport() {
+                const userSkillsLower = new Set(userSkills.map(s => s.toLowerCase()));
+                
+                // Render User Skills
+                const userSkillsList = document.getElementById('user-skills-list');
+                userSkillsList.innerHTML = userSkills.map(skill => `<span class="bg-indigo-100 text-indigo-800 text-sm font-semibold px-3 py-1 rounded-full">${skill}</span>`).join('');
+                
+                // --- Chart Logic ---
+                const radarCtx = document.getElementById('skillRadarChart').getContext('2d');
+                const barCtx = document.getElementById('skillBarChart').getContext('2d');
+
+                const categoryStrengths = categories.map(category => {
+                    const categorySkills = getSkillsForCategory(category);
+                    return calculateStrength(userSkills, categorySkills);
+                });
+
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            label: 'Your Skill Strength',
+                            data: categoryStrengths,
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeInOutQuart'
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { backdropColor: 'transparent' }
+                            }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                const topMarketSkills = analyzeMarketSkills();
+                const skillsToAcquire = topMarketSkills.filter(skill => !userSkillsLower.has(skill));
+
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: topMarketSkills.map(s => s.charAt(0).toUpperCase() + s.slice(1)), // Capitalize
+                        datasets: [{
+                            label: 'Skill Demand',
+                            data: Array(topMarketSkills.length).fill(100), // Dummy data for length
+                            backgroundColor: topMarketSkills.map(skill => userSkillsLower.has(skill) ? '#4f46e5' : '#e5e7eb'),
+                            borderColor: topMarketSkills.map(skill => userSkillsLower.has(skill) ? '#4338ca' : '#d1d5db'),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        animation: {
+                            duration: 1000,
+                            xAxis: true,
+                            yAxis: false,
+                            easing: 'easeOutCubic'
+                        },
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        scales: {
+                            x: { display: false, max: 110 },
+                            y: { grid: { display: false } }
+                        }
+                    }
+                });
+                
+                // Render Skills to Acquire List with animation
+                const skillsToAcquireList = document.getElementById('skills-to-acquire-list');
+                skillsToAcquireList.innerHTML = '';
+                if(skillsToAcquire.length > 0) {
+                    skillsToAcquire.forEach((skill, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-center justify-between stagger-item';
+                        li.style.transitionDelay = `${index * 100}ms`;
+                        li.innerHTML = `<span class="capitalize">${skill}</span><a href="courses.html" class="text-sm text-indigo-600 hover:underline font-semibold flex-shrink-0 ml-4">Find Courses &rarr;</a>`;
+                        skillsToAcquireList.appendChild(li);
+                    });
+                } else {
+                     skillsToAcquireList.innerHTML = `<p class="text-gray-500">Great job! You have all the top skills.</p>`;
+                }
+            }
+
+            // Animate on load
+            function animateOnLoad() {
+                document.querySelectorAll('.animated-card').forEach(card => {
+                    card.classList.add('is-visible');
+                });
+                 setTimeout(() => {
+                    document.querySelectorAll('.stagger-item').forEach(item => {
+                         item.style.opacity = '1';
+                         item.style.transform = 'translateX(0)';
+                    });
+                }, 500);
+            }
+
+            // Initial Render
+            renderReport();
+            animateOnLoad();
+        });
+    </script>
+</body>
+</html>
+

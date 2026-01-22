@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - AvsarSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .sidebar-scrollbar::-webkit-scrollbar { width: 6px; }
+        .sidebar-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .sidebar-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .sidebar-scrollbar::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+        
+        /* Sidebar Styles */
+        .sidebar-link { transition: all 0.2s ease-in-out; }
+        .sidebar-link:hover { background-color: #f3f4f6; color: #1f2937; transform: translateX(4px); }
+        .sidebar-active { background-color: #eef2ff; color: #4338ca; font-weight: 600; }
+        .sidebar-active:hover { background-color: #e0e7ff; transform: translateX(0); }
+        .category-submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+        
+        /* Settings Tab Styles */
+        .tab-active { border-color: #4f46e5; color: #4f46e5; }
+
+        /* Animation Styles */
+        .animated-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animated-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked { right: 0; border-color: #4f46e5; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4f46e5; }
+
+        /* Skill Tags */
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            background-color: #eef2ff;
+            color: #4338ca;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        .skill-tag-remove {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-100">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white shadow-lg flex-shrink-0 hidden md:flex flex-col">
+            <div class="p-6 border-b">
+                <a href="index.html" class="text-3xl font-bold text-indigo-600">AvsarSetu</a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto sidebar-scrollbar">
+                <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="mx-4 font-semibold">Home</span>
+                </a>
+                <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    <span class="mx-4 font-semibold">For You</span>
+                </a>
+                 <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <span class="mx-4 font-semibold">Saved Internships</span>
+                </a>
+                <!-- <a href="notifications.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <span class="mx-4 font-semibold">Notifications</span>
+                </a> -->
+
+                <a href="notifications.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <span class="mx-4 font-semibold">Notification</span>
+                </a>
+                 <div>
+                    <button id="categories-toggle" class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            <span class="mx-4 font-semibold">Categories</span>
+                        </div>
+                        <svg id="categories-arrow" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="categories-submenu" class="category-submenu pl-4 space-y-1 mt-1">
+                        <a href="dashboard.html" class="block py-2 px-4 text-gray-500 hover:text-indigo-600 rounded-lg">Science & IT</a>
+                    </div>
+                </div>
+                 <a href="skill-report.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <span class="mx-4 font-semibold">Skill Report</span>
+                </a>
+                 <a href="courses.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span class="mx-4 font-semibold">Upskilling Courses</span>
+                </a>
+            </nav>
+            <div class="mt-auto p-4 border-t">
+                 <a href="settings.html" class="flex items-center px-4 py-3 rounded-lg sidebar-active">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span class="mx-4 font-semibold">Settings</span>
+                </a>
+                 <a href="index.html" class="flex items-center px-4 py-3 rounded-lg text-gray-500 sidebar-link">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H3"></path></svg>
+                    <span class="mx-4 font-semibold">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+                <!-- Header Section -->
+                <section class="mb-10 animated-card">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Settings</h1>
+                    <p class="text-gray-600 mt-2">Manage your profile, account, and privacy preferences.</p>
+                </section>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg animated-card" style="transition-delay: 100ms;">
+                    <!-- Tabs -->
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm tab-active" data-tab="profile">Profile</button>
+                            <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="account">Account</button>
+                        </nav>
+                    </div>
+
+                    <!-- Profile Tab Content -->
+                    <div id="profile" class="tab-content mt-8">
+                        <form>
+                            <div class="space-y-8">
+                                <!-- Personal & Academic Details -->
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-4">Personal & Academic Details</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                                            <input type="text" value="Navya Vishwakarma" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">College/University</label>
+                                            <input type="text" value="JSS University" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Degree</label>
+                                            <input type="text" value="B.Tech" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700">Year of Study</label>
+                                            <input type="text" value="1st Year" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Skills & Experience -->
+                                <div class="border-t border-gray-200 pt-8">
+                                    <h3 class="text-lg font-medium text-gray-900 mb-4">Skills & Experience</h3>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Your Skills</label>
+                                        <div id="skill-tags-container" class="mt-2 p-2 border border-gray-300 rounded-md flex flex-wrap items-center">
+                                            <!-- Skill tags will be here -->
+                                            <input type="text" id="skill-input" placeholder="Add a skill and press Enter" class="flex-1 min-w-[150px] border-none focus:ring-0">
+                                        </div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <label class="block text-sm font-medium text-gray-700">Update Resume</label>
+                                        <input type="file" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 text-right">
+                                <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Account Tab Content -->
+                    <div id="account" class="tab-content mt-8 hidden">
+                        <div class="space-y-8">
+                            <!-- Change Email -->
+                            <div class="p-6 border rounded-lg">
+                                <h3 class="text-lg font-medium text-gray-900">Email Address</h3>
+                                <p class="mt-1 text-sm text-gray-500">Your current email is <span class="font-semibold text-gray-700">navya.vishwakarma121520@gmail.com</span></p>
+                                <button class="mt-4 py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Change</button>
+                            </div>
+                            <!-- Change Password -->
+                            <div class="p-6 border rounded-lg">
+                                <h3 class="text-lg font-medium text-gray-900">Change Password</h3>
+                                <form class="mt-4 space-y-4">
+                                     <div>
+                                        <label class="block text-sm font-medium text-gray-700">Current Password</label>
+                                        <input type="password" class="mt-1 block w-full md:w-1/2 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">New Password</label>
+                                        <input type="password" class="mt-1 block w-full md:w-1/2 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                    </div>
+                                    <div class="pt-2">
+                                        <button type="submit" class="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Update Password</button>
+                                    </div>
+                                </form>
+                            </div>
+                             <!-- Connected Accounts -->
+                            <div class="p-6 border rounded-lg">
+                                <h3 class="text-lg font-medium text-gray-900">Connected Accounts</h3>
+                                <p class="mt-1 text-sm text-gray-500">Connect your social accounts for faster, one-click login.</p>
+                                <div class="mt-4 flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <svg class="w-6 h-6" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/><path fill="none" d="M1 1h22v22H1z"/></svg>
+                                        <span class="ml-4 font-medium text-gray-700">Google</span>
+                                    </div>
+                                    <button class="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Connect</button>
+                                </div>
+                            </div>
+                             <!-- Danger Zone -->
+                             <div class="p-6 border border-red-300 rounded-lg">
+                                <h3 class="text-lg font-medium text-red-600">Danger Zone</h3>
+                                <p class="mt-1 text-sm text-gray-500">Once you delete your account, there is no going back. Please be certain.</p>
+                                <button class="mt-4 py-2 px-4 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100">Delete My Account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate on load
+            document.querySelectorAll('.animated-card').forEach(card => {
+                card.classList.add('is-visible');
+            });
+
+            // Tabs Logic
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.dataset.tab;
+                    tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                    button.classList.add('tab-active');
+                    tabContents.forEach(content => content.classList.toggle('hidden', content.id !== tab));
+                });
+            });
+
+            // Skill Tags Logic
+            const skillsContainer = document.getElementById('skill-tags-container');
+            const skillInput = document.getElementById('skill-input');
+            let skills = ['Java', 'Python', 'Data Science'];
+
+            function renderSkills() {
+                // Clear existing tags except the input
+                skillsContainer.querySelectorAll('.skill-tag').forEach(tag => tag.remove());
+                
+                skills.forEach(skill => {
+                    const tag = document.createElement('span');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `<span>${skill}</span><span class="skill-tag-remove" data-skill="${skill}">&times;</span>`;
+                    skillsContainer.insertBefore(tag, skillInput);
+                });
+            }
+
+            skillInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && skillInput.value.trim() !== '') {
+                    e.preventDefault();
+                    skills.push(skillInput.value.trim());
+                    skillInput.value = '';
+                    renderSkills();
+                }
+            });
+
+            skillsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('skill-tag-remove')) {
+                    const skillToRemove = e.target.dataset.skill;
+                    skills = skills.filter(skill => skill !== skillToRemove);
+                    renderSkills();
+                }
+            });
+            
+            renderSkills();
+        });
+    </script>
+</body>
+</html>
+

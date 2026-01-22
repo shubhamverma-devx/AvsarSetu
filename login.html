@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - AvsarSetu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .form-container { min-height: calc(100vh - 72px); }
+        .form-bg {
+            background-image: linear-gradient(rgba(79, 70, 229, 0.9), rgba(124, 58, 237, 0.9)), url('https://source.unsplash.com/1200x800/?government,india-gate');
+            background-size: cover;
+            background-position: center;
+        }
+        .form-toggle-active { border-bottom-color: #4f46e5; color: #4f46e5; }
+        .step-active { color: #4f46e5; }
+        .progress-bar-fill { transition: width 0.5s ease-in-out; }
+        select {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
+        }
+        .skill-tag {
+            background-color: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 16px; font-size: 14px; display: inline-flex; align-items: center; margin: 2px;
+        }
+        .skill-tag button { margin-left: 8px; color: #4338ca; background: none; border: none; cursor: pointer; font-weight: bold; }
+        #loader-overlay {
+            background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px);
+        }
+        .loader {
+            border: 4px solid #f3f3f3; border-top: 4px solid #4f46e5; border-radius: 50%;
+            width: 50px; height: 50px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .input-error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 1px #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Loader -->
+    <div id="loader-overlay" class="fixed inset-0 z-50 flex-col items-center justify-center hidden">
+        <div class="loader"></div>
+        <p id="loader-text" class="mt-4 text-lg font-semibold text-gray-700">Creating Your Profile...</p>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-2xl font-bold text-indigo-600">AvsarSetu</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-indigo-600">Home</a>
+                    <a href="post-internship.html" class="text-gray-600 hover:text-indigo-600">Posts</a>
+                    <a href="about.html" class="text-gray-600 hover:text-indigo-600">About Us</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex items-center justify-center form-container p-4">
+        <div class="container mx-auto max-w-5xl">
+            <div class="bg-white rounded-2xl shadow-2xl flex flex-wrap">
+                <!-- Left Branding Panel -->
+                <div class="w-full md:w-1/3 p-8 md:p-12 text-white form-bg flex flex-col justify-center rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+                    <h1 class="text-4xl font-extrabold">Welcome to AvsarSetu</h1>
+                    <p class="mt-4 text-indigo-200">The nation's smartest platform for government internship opportunities.</p>
+                </div>
+
+                <!-- Right Form Panel -->
+                <div class="w-full md:w-2/3 p-8 md:p-12">
+                    <div class="flex border-b mb-8">
+                        <button id="login-tab" class="flex-1 py-3 text-lg font-semibold border-b-4 form-toggle-active">Sign In</button>
+                        <button id="register-tab" class="flex-1 py-3 text-lg font-semibold text-gray-500 border-b-4 border-transparent">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="login-form">
+                        <form id="sign-in-form" action="dashboard.html">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome Back!</h2>
+                            <div class="mb-6"><label for="login-email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label><input type="email" id="login-email" class="w-full px-4 py-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="you@example.com" required></div>
+                            <div class="mb-6"><label for="login-password" class="block text-gray-700 text-sm font-bold mb-2">Password</label><input type="password" id="login-password" class="w-full px-4 py-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required></div>
+                            <div class="flex items-center justify-between mb-6"><a href="#" class="text-sm text-indigo-600 hover:underline">Forgot Password?</a></div>
+                            <div><button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition">Sign In</button></div>
+                        </form>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="register-form" class="hidden">
+                         <form id="profile-form">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4"><div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full progress-bar-fill" style="width: 25%"></div></div>
+                            <div class="flex justify-between mb-8 text-xs text-center">
+                                <span id="step-1-text" class="w-1/4 font-bold step-active">Account</span><span id="step-2-text" class="w-1/4 text-gray-500 font-medium">Academics</span><span id="step-3-text" class="w-1/4 text-gray-500 font-medium">Skills</span><span id="step-4-text" class="w-1/4 text-gray-500 font-medium">Preferences</span>
+                            </div>
+                            
+                            <!-- Step 1: Account -->
+                            <div id="step-1"><h2 class="text-2xl font-bold mb-6">Create Your Account</h2><div class="space-y-6"><div><label for="register-name" class="block text-gray-700 font-bold mb-2">Full Name</label><input type="text" id="register-name" placeholder="John Doe" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required></div><div><label for="register-email" class="block text-gray-700 font-bold mb-2">Email Address</label><input type="email" id="register-email" placeholder="you@example.com" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required></div><div><label for="register-password" class="block text-gray-700 font-bold mb-2">Password</label><input type="password" id="register-password" placeholder="Min. 6 characters" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required minlength="6"></div></div><p id="step-1-error" class="text-red-500 text-sm mt-4 hidden">Please fill all required fields correctly.</p></div>
+                            
+                            <!-- Step 2: Academics -->
+                            <div id="step-2" class="hidden"><h2 class="text-2xl font-bold mb-6">Academic Details</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label for="degree" class="block text-gray-700 font-bold mb-2">Degree</label><select id="degree" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required><option value="" disabled selected>Select Degree</option><option>B.Tech</option><option>B.E.</option><option>BCA</option><option>BSc</option><option>M.Tech</option><option>MCA</option><option>MSc</option><option>Other</option></select></div><div id="other-degree-wrapper" class="hidden"><label for="other-degree" class="block text-gray-700 font-bold mb-2">Please Specify Degree</label><input type="text" id="other-degree" placeholder="Your Degree" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div id="branch-wrapper" class="hidden"><label for="branch" class="block text-gray-700 font-bold mb-2">Branch</label><select id="branch" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="" disabled selected>Select Branch</option><option>Computer Science & Engineering</option><option>Information Technology</option><option>Electronics & Communication</option><option>Electrical Engineering</option><option>Mechanical Engineering</option><option>Civil Engineering</option><option>Artificial Intelligence & Data Science</option><option>Other</option></select></div><div id="other-branch-wrapper" class="hidden"><label for="other-branch" class="block text-gray-700 font-bold mb-2">Please Specify Branch</label><input type="text" id="other-branch" placeholder="Your Branch" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div><label for="year" class="block text-gray-700 font-bold mb-2">Year of Study</label><select id="year" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required><option value="" disabled selected>Select Year</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>Graduated</option></select></div><div class="relative"><label for="college" class="block text-gray-700 font-bold mb-2">College/University</label><input type="text" id="college" placeholder="Start typing your college name" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500" required autocomplete="off"><div id="college-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-b-lg max-h-60 overflow-y-auto hidden"></div></div></div><p id="step-2-error" class="text-red-500 text-sm mt-4 hidden">Please fill all required fields.</p></div>
+                            
+                            <!-- Step 3: Skills -->
+                            <div id="step-3" class="hidden"><h2 class="text-2xl font-bold mb-6">Skills & Experience</h2><div class="space-y-6"><div><label class="block text-gray-700 font-bold mb-2">Skill Set (Press Enter to add a skill)</label><div class="w-full p-3 rounded-lg bg-gray-100 border focus-within:ring-2 focus-within:ring-indigo-500"><div id="skill-tags-container" class="flex flex-wrap gap-2 mb-2"></div><input type="text" id="skill-input" placeholder="e.g., Python, Machine Learning" class="w-full bg-transparent focus:outline-none"></div></div><div><label class="block text-gray-700 font-bold mb-2">Projects</label><textarea placeholder="Describe a project you're proud of." rows="4" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea></div></div></div>
+
+                            <!-- Step 4: Preferences -->
+                            <div id="step-4" class="hidden"><h2 class="text-2xl font-bold mb-6">Preferences & Resume</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label class="block text-gray-700 font-bold mb-2">Internship Type</label><select class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"><option>Any</option><option>Work from Home</option><option>In-Office</option><option>Hybrid</option></select></div><div><label class="block text-gray-700 font-bold mb-2">Preferred Duration</label><select class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"><option>Any</option><option>1 Month</option><option>3 Months</option><option>6 Months</option></select></div><div><label class="block text-gray-700 font-bold mb-2">Preferred Domains</label><input type="text" placeholder="e.g., Technology, Research" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div><label class="block text-gray-700 font-bold mb-2">Preferred Locations</label><input type="text" placeholder="e.g., Delhi, Mumbai, Remote" class="w-full p-3 rounded-lg bg-gray-100 border focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="md:col-span-2"><label class="block text-gray-700 font-bold mb-2">Upload Resume (PDF)</label><input type="file" accept=".pdf" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"></div></div></div>
+
+                            <div class="mt-8 flex justify-between"><button type="button" id="prev-btn" class="bg-gray-300 text-gray-800 font-bold py-3 px-8 rounded-lg hover:bg-gray-400 transition hidden">Previous</button><button type="button" id="next-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-indigo-700 transition ml-auto">Next</button><button type="submit" id="submit-btn" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition hidden">Finish & Go to Dashboard</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginTab = document.getElementById('login-tab'), registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form'), registerForm = document.getElementById('register-form');
+            const loaderOverlay = document.getElementById('loader-overlay');
+            const loaderText = document.getElementById('loader-text');
+
+            loginTab.addEventListener('click', () => { loginTab.classList.add('form-toggle-active'); registerTab.classList.remove('form-toggle-active'); loginForm.classList.remove('hidden'); registerForm.classList.add('hidden'); });
+            registerTab.addEventListener('click', () => { registerTab.classList.add('form-toggle-active'); loginTab.classList.remove('form-toggle-active'); registerForm.classList.remove('hidden'); loginForm.classList.add('hidden'); });
+
+            const steps = [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3'), document.getElementById('step-4')];
+            const stepErrors = [document.getElementById('step-1-error'), document.getElementById('step-2-error'), null, null];
+            const stepTexts = [document.getElementById('step-1-text'), document.getElementById('step-2-text'), document.getElementById('step-3-text'), document.getElementById('step-4-text')];
+            const prevBtn = document.getElementById('prev-btn'), nextBtn = document.getElementById('next-btn'), submitBtn = document.getElementById('submit-btn');
+            const progressBar = document.getElementById('progress-bar');
+            let currentStep = 0;
+
+            function validateStep(stepIndex) {
+                let isValid = true;
+                const currentStepDiv = steps[stepIndex];
+                const inputs = currentStepDiv.querySelectorAll('input[required], select[required]');
+                inputs.forEach(input => {
+                    let fieldValid = true;
+                    if (input.tagName === 'SELECT') { if (input.value === '') fieldValid = false; }
+                    else if (input.type === 'email') { if (!/^\S+@\S+\.\S+$/.test(input.value)) fieldValid = false; }
+                    else if (input.type === 'password') { if (input.value.length < input.minLength) fieldValid = false; }
+                    else { if (input.value.trim() === '') fieldValid = false; }
+                    if(!fieldValid) { isValid = false; input.classList.add('input-error'); }
+                    else { input.classList.remove('input-error'); }
+                });
+                if(stepErrors[stepIndex]){ stepErrors[stepIndex].classList.toggle('hidden', isValid); }
+                return isValid;
+            }
+
+            function updateStepUI() {
+                steps.forEach((step, index) => step.classList.toggle('hidden', index !== currentStep));
+                stepTexts.forEach((text, index) => { text.classList.toggle('step-active', index === currentStep); text.classList.toggle('text-gray-500', index !== currentStep); });
+                progressBar.style.width = `${((currentStep) / (steps.length - 1)) * 100}%`;
+                if (currentStep === 0) progressBar.style.width = '25%';
+                prevBtn.classList.toggle('hidden', currentStep === 0);
+                nextBtn.classList.toggle('hidden', currentStep === steps.length - 1);
+                submitBtn.classList.toggle('hidden', currentStep !== steps.length - 1);
+            }
+
+            nextBtn.addEventListener('click', () => { 
+                if (validateStep(currentStep)) {
+                    loaderText.textContent = 'Loading...';
+                    loaderOverlay.style.display = 'flex';
+                    setTimeout(() => {
+                        loaderOverlay.style.display = 'none';
+                        if (currentStep < steps.length - 1) { 
+                            currentStep++; 
+                            updateStepUI(); 
+                        }
+                    }, 800);
+                } 
+            });
+
+            prevBtn.addEventListener('click', () => { 
+                loaderText.textContent = 'Loading...';
+                loaderOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    loaderOverlay.style.display = 'none';
+                    if (currentStep > 0) { 
+                        currentStep--; 
+                        updateStepUI(); 
+                    }
+                }, 500);
+            });
+            
+            const degreeSelect = document.getElementById('degree'), branchWrapper = document.getElementById('branch-wrapper'), otherDegreeWrapper = document.getElementById('other-degree-wrapper'), otherDegreeInput = document.getElementById('other-degree');
+            const branchSelect = document.getElementById('branch'), otherBranchWrapper = document.getElementById('other-branch-wrapper'), otherBranchInput = document.getElementById('other-branch');
+            degreeSelect.addEventListener('change', () => {
+                const isEng = degreeSelect.value === 'B.Tech' || degreeSelect.value === 'B.E.';
+                branchWrapper.classList.toggle('hidden', !isEng); branchSelect.required = isEng;
+                otherDegreeWrapper.classList.toggle('hidden', degreeSelect.value !== 'Other'); otherDegreeInput.required = degreeSelect.value === 'Other';
+            });
+            branchSelect.addEventListener('change', () => { otherBranchWrapper.classList.toggle('hidden', branchSelect.value !== 'Other'); otherBranchInput.required = branchSelect.value === 'Other'; });
+
+            const skillInput = document.getElementById('skill-input'), tagsContainer = document.getElementById('skill-tags-container');
+            skillInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); const skill = this.value.trim();
+                    if (skill) {
+                        const tag = document.createElement('span'); tag.className = 'skill-tag'; tag.textContent = skill;
+                        const removeBtn = document.createElement('button'); removeBtn.innerHTML = '&times;'; removeBtn.onclick = () => tag.remove();
+                        tag.appendChild(removeBtn); tagsContainer.appendChild(tag); this.value = '';
+                    }
+                }
+            });
+
+            const collegeInput = document.getElementById('college'), suggestionsContainer = document.getElementById('college-suggestions');
+            const colleges = ["Indian Institute of Technology Madras", "Indian Institute of Technology Delhi", "Indian Institute of Technology Bombay", "Indian Institute of Technology Kanpur", "Indian Institute of Technology Kharagpur", "Indian Institute of Technology Roorkee", "Indian Institute of Technology Guwahati", "National Institute of Technology Tiruchirappalli", "National Institute of Technology Surathkal", "Vellore Institute of Technology", "Jadavpur University", "Anna University", "Indian Institute of Technology Hyderabad", "National Institute of Technology Rourkela", "Indian Institute of Technology (BHU) Varanasi", "Indian Institute of Technology Indore", "National Institute of Technology Warangal", "Indian Institute of Technology Dhanbad", "Amrita Vishwa Vidyapeetham", "Thapar Institute of Engineering and Technology", "Motilal Nehru National Institute of Technology Allahabad", "National Institute of Technology Calicut", "Birla Institute of Technology and Science, Pilani", "Jamia Millia Islamia, New Delhi", "Delhi Technological University", "Aligarh Muslim University", "Manipal Institute of Technology", "SRM Institute of Science and Technology", "Kalinga Institute of Industrial Technology", "International Institute of Information Technology Hyderabad", "Visvesvaraya National Institute of Technology Nagpur", "Amity University", "Sardar Vallabhbhai National Institute of Technology Surat", "Indian Institute of Engineering Science and Technology Shibpur", "National Institute of Technology Durgapur", "Malaviya National Institute of Technology Jaipur", "National Institute of Technology Kurukshetra", "Christ University", "Shanmugha Arts, Science, Technology & Research Academy", "Jawaharlal Nehru Technological University", "Osmania University", "University of Hyderabad", "Punjab Engineering College", "Netaji Subhas University of Technology", "College of Engineering, Pune", "PSG College of Technology", "Indian Institute of Information Technology Allahabad", "International Institute of Information Technology Bangalore", "Maulana Azad National Institute of Technology Bhopal", "National Institute of Technology Silchar", "National Institute of Technology Jalandhar", "National Institute of Technology Meghalaya", "Dr. B. R. Ambedkar National Institute of Technology Jalandhar", "National Institute of Technology Raipur", "National Institute of Technology Agartala", "National Institute of Technology Goa", "National Institute of Technology Hamirpur", "National Institute of Technology Patna", "National Institute of Technology Puducherry", "National Institute of Technology Sikkim", "National Institute of Technology Uttarakhand", "National Institute of Technology, Manipur", "National Institute of Technology, Mizoram", "National Institute of Technology, Arunachal Pradesh", "National Institute of Technology, Nagaland", "National Institute of Technology, Srinagar", "Indian Institute of Information Technology, Design and Manufacturing, Jabalpur", "Indian Institute of Information Technology, Design and Manufacturing, Kancheepuram", "Indian Institute of Information Technology, Gwalior", "Indian Institute of Information Technology, Lucknow", "Indian Institute of Information Technology, Pune", "Indian Institute of Information Technology, Kottayam", "Indian Institute of Information Technology, Sri City", "Indian Institute of Information Technology, Vadodara", "Indian Institute of Information Technology, Guwahati", "Birla Institute of Technology, Mesra", "PES University", "RV College of Engineering", "BMS College of Engineering", "Ramaiah Institute of Technology", "Siddaganga Institute of Technology", "The National Institute of Engineering, Mysore", "Manipal University Jaipur", "Lovely Professional University", "Chandigarh University", "Graphic Era University", "University of Petroleum and Energy Studies", "Jaypee Institute of Information Technology", "Galgotias University", "Sharda University", "Bennett University"];
+            collegeInput.addEventListener('input', () => {
+                const query = collegeInput.value.toLowerCase(); suggestionsContainer.innerHTML = '';
+                if (query.length < 2) { suggestionsContainer.classList.add('hidden'); return; }
+                const filteredColleges = colleges.filter(college => college.toLowerCase().includes(query));
+                if (filteredColleges.length > 0) {
+                    suggestionsContainer.classList.remove('hidden');
+                    filteredColleges.forEach(college => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'p-3 hover:bg-gray-100 cursor-pointer'; suggestionItem.textContent = college;
+                        suggestionItem.addEventListener('click', () => { collegeInput.value = college; suggestionsContainer.classList.add('hidden'); });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    });
+                } else { suggestionsContainer.classList.add('hidden'); }
+            });
+            window.addEventListener('click', (e) => { if (e.target !== collegeInput) { suggestionsContainer.classList.add('hidden'); } });
+
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault(); 
+                loaderText.textContent = 'Creating Your Profile...';
+                loaderOverlay.style.display = 'flex';
+                setTimeout(() => { 
+                    window.location.href = 'dashboard.html'; 
+                }, 2000);
+            });
+            
+            document.querySelectorAll('input[required], select[required]').forEach(input => {
+                input.addEventListener('input', () => { if( (input.tagName === 'SELECT' && input.value !== '') || (input.value.trim() !== '') ) { input.classList.remove('input-error'); } });
+            });
+            updateStepUI();
+        });
+    </script>
+</body>
+</html>
+
